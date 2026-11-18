@@ -1,0 +1,6 @@
+{
+  "id": "git-sync",
+  "name": "Git Sync",
+  "priority": 200,
+  "description": "Synchronizes collections with Git repositories."
+}
