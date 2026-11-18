@@ -29,7 +29,7 @@ Damit wir jederzeit auf das Original rebasen können, gilt für jede Anpassung:
 | Markdown ansehen und bearbeiten | `fork: Add Markdown source view and editing` | keine |
 | Versionen benennen | `fork: Allow naming versions in the document history` | keine |
 | Container-Image, Rebase-Skript, diese Doku | `fork: Add container build, upstream sync and documentation` | siehe [Container](#container) |
-| Git-Sync für Sammlungen | *in Arbeit, eigener Abschnitt folgt* | |
+| Git-Sync für Sammlungen | eigene Commits aus PR #1 | `GIT_SYNC_*`, siehe [Git-Sync](#git-sync-für-sammlungen) |
 | OIDC-Gruppen und Berechtigungen | *in Arbeit, eigener Abschnitt folgt* | |
 
 Die aktuelle Liste mit Hashes zeigt `fork/sync-upstream.sh --list`.
@@ -102,6 +102,31 @@ Hinweis: Outline legt eine neue Version erst einige Minuten nach der letzten
 Änderung an (Upstream-Verhalten). Eine frische Änderung taucht deshalb nicht
 sofort im Verlauf auf.
 
+### Git-Sync für Sammlungen
+
+Kommt mit PR #1 (Branch `claude/project-thread-l1ysrf`). Eine Sammlung lässt
+sich an ein Git-Repository anbinden. Einrichtung durch Admins unter
+**Einstellungen → Integrationen → Git Sync**.
+
+- Dokumente liegen als Markdown mit Frontmatter (`id`, `title`, `url`,
+  `parent` …) im Repository, Unterdokumente als Ordner.
+- Standardmäßig in beide Richtungen: Outline → Git nach einer kurzen
+  Wartezeit (`GIT_SYNC_DEBOUNCE`, 30 s) oder beim nächsten Abgleich,
+  Git → Outline per Abgleich (`GIT_SYNC_POLL_INTERVAL`, 300 s), stündlichem
+  Cron und Push-Webhook.
+- Konflikte: Outline gewinnt, die Git-Version bleibt in der Git-Historie.
+  In Git gelöschte Dateien schieben das Dokument in den Papierkorb.
+- Git-Tags lassen sich in Outline anlegen, auflisten und löschen.
+- Zugriff nur über HTTPS mit Token, das Token liegt verschlüsselt in der
+  Datenbank. Weitere Variablen: `GIT_SYNC_CACHE_DIR`,
+  `GIT_SYNC_ALLOW_INSECURE_URLS` (nur für Tests).
+- Code: Plugin `plugins/git-sync`, Model `server/models/CollectionGitSync.ts`
+  (eingehängt mit einer Zeile in `server/models/index.ts`), Migration
+  `20261118220000-create-collection-git-syncs.js`.
+- Das Image enthält dafür `git` (`RUNTIME_APT_PACKAGES` in `fork/Dockerfile`).
+- Grenzen: Verschieben von Dateien in Git verschiebt keine Dokumente, Anhänge
+  werden verlinkt statt kopiert, kein SSH.
+
 ## Container
 
 Bei jedem Push auf `main` (und bei Tags `fork-v*`) baut der Workflow
@@ -142,8 +167,10 @@ docker build -f fork/Dockerfile -t outline-fork .
 ```
 
 Unterschiede zum Upstream-Image: ein einziges mehrstufiges Dockerfile statt
-`Dockerfile.base` plus `Dockerfile`, und der Healthcheck nutzt Node statt
-`wget`, sodass im schlanken Laufzeit-Image keine Zusatzpakete nötig sind.
+`Dockerfile.base` plus `Dockerfile`, der Healthcheck nutzt Node statt `wget`,
+und das Laufzeit-Image enthält `git` für den Git-Sync. Zusätzliche Pakete für
+das Image gehören in `RUNTIME_APT_PACKAGES` in `fork/Dockerfile`, nicht in das
+Upstream-`Dockerfile`.
 
 ## Auf das Original rebasen
 

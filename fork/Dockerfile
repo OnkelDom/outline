@@ -65,6 +65,13 @@ COPY --from=build --chown=nodejs:nodejs $APP_PATH/.sequelizerc ./.sequelizerc
 COPY --from=build --chown=nodejs:nodejs $APP_PATH/node_modules ./node_modules
 COPY --from=build --chown=nodejs:nodejs $APP_PATH/package.json ./package.json
 
+# Runtime packages: git is used by the Git sync for collections.
+ARG RUNTIME_APT_PACKAGES=git
+RUN if [ -n "$RUNTIME_APT_PACKAGES" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends $RUNTIME_APT_PACKAGES ca-certificates && \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
+
 ENV FILE_STORAGE_LOCAL_ROOT_DIR=/var/lib/outline/data
 RUN mkdir -p "$FILE_STORAGE_LOCAL_ROOT_DIR" && \
     chown -R nodejs:nodejs "$FILE_STORAGE_LOCAL_ROOT_DIR" && \
