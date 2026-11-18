@@ -9,6 +9,7 @@ import {
   exportRevisionActionFactory,
   restoreRevision,
 } from "~/actions/definitions/revisions";
+import { nameRevisionActionFactory } from "~/actions/definitions/forkRevisionName";
 import { useMemo } from "react";
 import { useMenuAction } from "~/hooks/useMenuAction";
 import { ActionContextProvider } from "~/hooks/useActionContext";
@@ -23,6 +24,7 @@ function RevisionMenu({ document, revisionId }: Props) {
   const actions = useMemo(
     () => [
       restoreRevision,
+      nameRevisionActionFactory(revisionId),
       ActionSeparator,
       copyLinkToRevisionActionFactory(revisionId),
       exportRevisionActionFactory(revisionId),
