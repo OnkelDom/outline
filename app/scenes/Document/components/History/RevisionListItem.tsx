@@ -16,6 +16,7 @@ import {
   exportRevisionActionFactory,
   restoreRevision,
 } from "~/actions/definitions/revisions";
+import { nameRevisionActionFactory } from "~/actions/definitions/forkRevisionName";
 import { Avatar, AvatarSize } from "~/components/Avatar";
 import Item, { Actions } from "~/components/List/Item";
 import { ContextMenu } from "~/components/Menu/ContextMenu";
@@ -52,6 +53,7 @@ const RevisionListItem = ({ item, document, ...rest }: Props) => {
   const actions = useMemo(
     () => [
       restoreRevision,
+      nameRevisionActionFactory(item.id),
       ActionSeparator,
       copyLinkToRevisionActionFactory(item.id),
       exportRevisionActionFactory(item.id),
@@ -134,16 +136,32 @@ const RevisionListItem = ({ item, document, ...rest }: Props) => {
           exact
           to={to}
           title={
-            <Time
-              dateTime={item.createdAt}
-              format={{
-                en_US: "MMM do, h:mm a",
-                fr_FR: "'Le 'd MMMM 'à' H:mm",
-              }}
-              relative={false}
-              addSuffix
-              onClick={handleTimeClick}
-            />
+            item.name ? (
+              <>
+                <RevisionName>{item.name}</RevisionName> &middot;{" "}
+                <Time
+                  dateTime={item.createdAt}
+                  format={{
+                    en_US: "MMM do, h:mm a",
+                    fr_FR: "'Le 'd MMMM 'à' H:mm",
+                  }}
+                  relative={false}
+                  addSuffix
+                  onClick={handleTimeClick}
+                />
+              </>
+            ) : (
+              <Time
+                dateTime={item.createdAt}
+                format={{
+                  en_US: "MMM do, h:mm a",
+                  fr_FR: "'Le 'd MMMM 'à' H:mm",
+                }}
+                relative={false}
+                addSuffix
+                onClick={handleTimeClick}
+              />
+            )
           }
           image={
             item.collaborators ? (
@@ -168,6 +186,10 @@ const RevisionListItem = ({ item, document, ...rest }: Props) => {
     </ActionContextProvider>
   );
 };
+
+const RevisionName = styled.strong`
+  font-weight: 600;
+`;
 
 const Meta = styled.div`
   ${ellipsis()})

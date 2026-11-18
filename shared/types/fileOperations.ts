@@ -4,6 +4,7 @@ export enum ExportContentType {
   Html = "text/html",
   TextBundle = "application/x-textbundle",
   Pdf = "application/pdf",
+  Docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 
 /** File formats supported by bulk imports and exports. */

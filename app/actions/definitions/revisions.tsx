@@ -22,6 +22,7 @@ import {
 } from "~/actions";
 import { RevisionSection } from "~/actions/sections";
 import env from "~/env";
+import { downloadRevisionAsDocxActionFactory } from "~/actions/definitions/forkWordExport";
 import history from "~/utils/history";
 import {
   documentHistoryPath,
@@ -247,6 +248,7 @@ export const exportRevisionActionFactory = (revisionId: string) =>
       downloadRevisionAsHTMLActionFactory(revisionId),
       downloadRevisionAsTextBundleActionFactory(revisionId),
       downloadRevisionAsPDFActionFactory(revisionId),
+      downloadRevisionAsDocxActionFactory(revisionId),
       ActionSeparator,
       printRevisionActionFactory(revisionId),
     ],

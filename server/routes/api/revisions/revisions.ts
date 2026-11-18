@@ -11,6 +11,7 @@ import auth from "@server/middlewares/authentication";
 import { rateLimiter } from "@server/middlewares/rateLimiter";
 import { transaction } from "@server/middlewares/transaction";
 import validate from "@server/middlewares/validate";
+import { acceptsDocx, sendDocx } from "@server/utils/docxExport";
 import { Attachment, Document, Revision } from "@server/models";
 import AttachmentHelper from "@server/models/helpers/AttachmentHelper";
 import { DocumentHelper } from "@server/models/helpers/DocumentHelper";
@@ -152,6 +153,14 @@ router.post(
     });
     authorize(user, "listRevisions", document);
     authorize(user, "download", document);
+
+    if (acceptsDocx(accept)) {
+      await sendDocx(ctx, revision, {
+        teamId: document.teamId,
+        title: revision.name || revision.title,
+      });
+      return;
+    }
 
     let contentType: string;
     let content: string;

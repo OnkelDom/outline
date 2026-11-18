@@ -187,7 +187,7 @@ export const toColorFormats = (color: string): ColorFormats => {
   return formats;
 };
 
-interface PresetColor {
+export interface PresetColor {
   hex: string;
   name: string;
 }
