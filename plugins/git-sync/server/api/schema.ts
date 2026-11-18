@@ -50,8 +50,11 @@ export const GitSyncCreateSchema = BaseSchema.extend({
   body: z.object({
     collectionId: z.uuid(),
     ...settings,
-    /** The access token for HTTPS authentication. */
-    token: z.string().max(4096).nullish(),
+    /**
+     * The access token for HTTPS authentication. Not named "token", which the
+     * authentication middleware reads as an API key.
+     */
+    accessToken: z.string().max(4096).nullish(),
   }),
 });
 
@@ -69,7 +72,7 @@ export const GitSyncUpdateSchema = BaseSchema.extend({
     authorEmail: settings.authorEmail.optional(),
     enabled: z.boolean().optional(),
     /** A new token, null to remove it, or undefined to keep the current one. */
-    token: z.string().max(4096).nullish(),
+    accessToken: z.string().max(4096).nullish(),
   }),
 });
 

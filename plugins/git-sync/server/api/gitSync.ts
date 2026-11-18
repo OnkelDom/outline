@@ -155,7 +155,7 @@ router.post(
   authentication,
   validate(T.GitSyncCreateSchema),
   async (ctx: APIContext<T.GitSyncCreateReq>) => {
-    const { collectionId, token, ...settings } = ctx.input.body;
+    const { collectionId, accessToken, ...settings } = ctx.input.body;
     const { user } = ctx.state.auth;
 
     const collection = await Collection.findByPk(collectionId, {
@@ -175,7 +175,7 @@ router.post(
       ...settings,
       path: path ?? "",
       enabled: settings.enabled ?? true,
-      token: token?.trim() || null,
+      token: accessToken?.trim() || null,
       collectionId,
       teamId: user.teamId,
       createdById: user.id,
@@ -196,7 +196,7 @@ router.post(
   authentication,
   validate(T.GitSyncUpdateSchema),
   async (ctx: APIContext<T.GitSyncUpdateReq>) => {
-    const { id, token, ...settings } = ctx.input.body;
+    const { id, accessToken, ...settings } = ctx.input.body;
     const { user } = ctx.state.auth;
     const sync = await loadSync(user, id);
 
@@ -212,7 +212,9 @@ router.post(
         Object.entries(settings).filter(([, value]) => value !== undefined)
       ),
       ...(path !== undefined ? { path } : {}),
-      ...(token !== undefined ? { token: token?.trim() || null } : {}),
+      ...(accessToken !== undefined
+        ? { token: accessToken?.trim() || null }
+        : {}),
       // A new remote or folder has no shared history with the old one.
       ...(remoteChanged ? { lastCommitSha: null, lastSyncedAt: null } : {}),
       // Take over the sync, the documents are now changed as this user.

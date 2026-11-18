@@ -75,7 +75,7 @@ describe("#gitSync.create", () => {
         repositoryUrl: `file://${remote}`,
         branch: "main",
         path: "/docs/",
-        token: "secret-token",
+        accessToken: "secret-token",
         authorEmail: "",
       },
     });
@@ -139,7 +139,7 @@ describe("#gitSync.update", () => {
         body: {
           collectionId: collection.id,
           repositoryUrl: `file://${remote}`,
-          token: "first",
+          accessToken: "first",
         },
       })
     ).json();
@@ -154,7 +154,7 @@ describe("#gitSync.update", () => {
     expect(body.data.hasToken).toBe(true);
 
     res = await server.post("/api/gitSync.update", admin, {
-      body: { id: created.data.id, token: null },
+      body: { id: created.data.id, accessToken: null },
     });
     body = await res.json();
     expect(body.data.hasToken).toBe(false);

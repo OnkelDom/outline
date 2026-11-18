@@ -27,7 +27,7 @@ interface FormData {
   branch: string;
   path: string;
   username: string;
-  token: string;
+  accessToken: string;
   authorName: string;
   authorEmail: string;
 }
@@ -49,7 +49,7 @@ export function GitSyncForm({ collectionId, sync, onSaved }: Props) {
       branch: sync?.branch ?? "main",
       path: sync?.path ?? "",
       username: sync?.username ?? "",
-      token: "",
+      accessToken: "",
       authorName: sync?.authorName ?? "",
       authorEmail: sync?.authorEmail ?? "",
     },
@@ -57,8 +57,8 @@ export function GitSyncForm({ collectionId, sync, onSaved }: Props) {
 
   const handleSave = useCallback(
     async (data: FormData) => {
-      const token = data.token.trim()
-        ? data.token.trim()
+      const token = data.accessToken.trim()
+        ? data.accessToken.trim()
         : removeToken
           ? null
           : undefined;
@@ -67,14 +67,14 @@ export function GitSyncForm({ collectionId, sync, onSaved }: Props) {
           ? await client.post("/gitSync.update", {
               id: sync.id,
               ...data,
-              token,
+              accessToken: token,
               direction,
               enabled,
             })
           : await client.post("/gitSync.create", {
               collectionId,
               ...data,
-              token: token ?? null,
+              accessToken: token ?? null,
               direction,
               enabled,
             });
@@ -136,7 +136,7 @@ export function GitSyncForm({ collectionId, sync, onSaved }: Props) {
           }
           flex
           autoComplete="new-password"
-          {...register("token")}
+          {...register("accessToken")}
         />
       </Flex>
       {sync?.hasToken && (
