@@ -25,6 +25,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import CellBackgroundColorPicker from "../components/CellBackgroundColorPicker";
 import HighlightColorPicker from "../components/HighlightColorPicker";
+import { TextColorPicker } from "../components/TextColorPicker";
 
 import { getDocumentHighlightColors } from "@shared/editor/queries/getDocumentHighlightColors";
 import { getMarksBetween } from "@shared/editor/queries/getMarksBetween";
@@ -51,6 +52,8 @@ import {
 import type { CellSelection } from "prosemirror-tables";
 import TableCell from "@shared/editor/nodes/TableCell";
 import Highlight from "@shared/editor/marks/Highlight";
+import TextColor from "@shared/editor/marks/TextColor";
+import { TextColorIcon } from "~/components/Icons/TextColorIcon";
 import { DottedCircleIcon } from "~/components/Icons/DottedCircleIcon";
 
 /**
@@ -81,6 +84,16 @@ export default function formattingMenuItems(ctx: SelectionContext): MenuItem[] {
     : getMarksBetween(state.selection.from, state.selection.to, state).find(
         ({ mark }) => mark.type === schema.marks.highlight
       )?.mark;
+
+  const textColor = schema.marks.text_color
+    ? isEmpty
+      ? (state.storedMarks || state.selection.$from.marks()).find(
+          (mark) => mark.type === schema.marks.text_color
+        )
+      : getMarksBetween(state.selection.from, state.selection.to, state).find(
+          ({ mark }) => mark.type === schema.marks.text_color
+        )?.mark
+    : undefined;
 
   const cellSelectionHasBackground = isTableCell
     ? hasNodeAttrMarkCellSelection(
@@ -441,6 +454,67 @@ export default function formattingMenuItems(ctx: SelectionContext): MenuItem[] {
                     activeColor={
                       highlight?.attrs.color || Highlight.presetColors[0].hex
                     }
+                  />
+                ),
+                preventCloseCondition: () =>
+                  !!document.activeElement?.matches(
+                    ".ProseMirror.ProseMirror-focused"
+                  ),
+              },
+            ],
+          },
+        ];
+      },
+    },
+    {
+      group: MenuItemGroup.inline,
+      tooltip: t("Text color"),
+      icon: <TextColorIcon color={textColor?.attrs.color || undefined} />,
+      active: () => !!textColor,
+      visible: !!schema.marks.text_color && !isInCode && canFormat,
+      children: (): MenuItem[] => {
+        const currentColor: string | undefined = textColor?.attrs.color;
+
+        return [
+          ...(textColor
+            ? [
+                {
+                  name: "text_color",
+                  label: t("Default"),
+                  icon: <DottedCircleIcon retainColor color="transparent" />,
+                  active: () => false,
+                  attrs: { color: currentColor },
+                },
+              ]
+            : []),
+          ...TextColor.presetColors.map((preset) => ({
+            name: "text_color",
+            label: preset.name,
+            icon: <CircleIcon retainColor color={preset.hex} />,
+            active: isMarkActive(schema.marks.text_color, {
+              color: preset.hex,
+            }),
+            attrs: { color: preset.hex },
+          })),
+          ...(currentColor && !TextColor.isPresetColor(currentColor)
+            ? [
+                {
+                  name: "text_color",
+                  label: currentColor,
+                  icon: <CircleIcon retainColor color={currentColor} />,
+                  active: () => true,
+                  attrs: { color: currentColor },
+                },
+              ]
+            : []),
+          {
+            icon: <CircleIcon retainColor color="rainbow" />,
+            label: "Custom",
+            children: [
+              {
+                content: (
+                  <TextColorPicker
+                    activeColor={currentColor || TextColor.presetColors[0].hex}
                   />
                 ),
                 preventCloseCondition: () =>
