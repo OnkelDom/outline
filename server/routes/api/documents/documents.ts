@@ -101,6 +101,7 @@ import type { APIContext } from "@server/types";
 import { RateLimiterStrategy } from "@server/utils/RateLimiter";
 import { convertBareUrlsToEmbedMarkdown } from "@server/utils/embeds";
 import { streamZipResponse } from "@server/utils/koa";
+import { acceptsDocx, sendDocx } from "@server/utils/docxExport";
 import { QueryHelper } from "@server/storage/QueryHelper";
 import { getTeamFromContext } from "@server/utils/passport";
 import pagination, { paginateQuery } from "../middlewares/pagination";
@@ -951,6 +952,14 @@ router.post(
     });
 
     authorize(user, "download", document);
+
+    if (acceptsDocx(accept) && !includeChildDocuments) {
+      await sendDocx(ctx, document, {
+        teamId: user.teamId,
+        title: document.displayTitle,
+      });
+      return;
+    }
 
     const format = accept?.includes("text/html")
       ? FileOperationFormat.HTMLZip

@@ -116,6 +116,7 @@ import lazyWithRetry from "@shared/utils/lazyWithRetry";
 import env from "~/env";
 import { isMac, isWindows } from "@shared/utils/browser";
 import isCloudHosted from "~/utils/isCloudHosted";
+import { downloadDocumentAsDocx } from "~/actions/definitions/forkWordExport";
 import DocumentMove from "~/components/DocumentExplorer/DocumentMove";
 import { DocumentIcon } from "~/components/Icons/DocumentIcon";
 
@@ -1184,6 +1185,7 @@ export const exportDocument = createActionWithChildren({
     downloadDocumentAsHTML,
     downloadDocumentAsTextBundle,
     downloadDocumentAsPDF,
+    downloadDocumentAsDocx,
     ActionSeparator,
     printDocument,
   ],

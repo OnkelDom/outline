@@ -6592,6 +6592,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^26.6.2":
+  version: 26.6.6
+  resolution: "@types/node@npm:26.6.6"
+  dependencies:
+    undici-types: "npm:~8.9.0"
+  checksum: 10c0/5cb63f644f6e85a257a9cd2403cbcbe196760e2a35fd3ec9fb8b5cff663e14cc832b198cc17b53f870a2e30900ed45a1fb3f53e6589aba26b8e8c484aa672053
+  languageName: node
+  linkType: hard
+
 "@types/oauth@npm:*":
   version: 0.9.6
   resolution: "@types/oauth@npm:0.9.6"
@@ -9181,6 +9190,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"docx@npm:9.15.1":
+  version: 9.15.1
+  resolution: "docx@npm:9.15.1"
+  dependencies:
+    "@types/node": "npm:^26.6.2"
+    fflate: "npm:^0.8.3"
+    nanoid: "npm:^6.0.1"
+  checksum: 10c0/8cea1bd9598d8918de100292cf4bad3676a54e7573bd2925231689ac2477acd065ecc464a4ede2c20590104420cb54243ae484d7b045fa65745274d7d23022b4
+  languageName: node
+  linkType: hard
+
 "dom-serializer@npm:^2.0.0":
   version: 2.0.0
   resolution: "dom-serializer@npm:2.0.0"
@@ -10106,6 +10126,13 @@ __metadata:
   version: 0.8.2
   resolution: "fflate@npm:0.8.2"
   checksum: 10c0/03448d630c0a583abea594835a9fdb2aaf7d67787055a761515bf4ed862913cfd693b4c4ffd5c3f3b355a70cf1e19033e9ae5aedcca103188aaff91b8bd6e293
+  languageName: node
+  linkType: hard
+
+"fflate@npm:^0.8.3":
+  version: 0.8.3
+  resolution: "fflate@npm:0.8.3"
+  checksum: 10c0/eab181ca37f5348ae76d4b6f840e0026e30220e33153289ac942222d8b9638237d486507dbcc09878d724095bd354993a2ee48bbee99c8f2c6440d4448719aa7
   languageName: node
   linkType: hard
 
@@ -13590,6 +13617,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^6.0.1":
+  version: 6.0.2
+  resolution: "nanoid@npm:6.0.2"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/3c0223d2e658e6bab838af37112731df28eb5146b982e1b89bc1889b7a1476e0a36b4aa37ac6a567e7ebaf22a690d7916a80143a84cef77bd77416d0f1d20b9c
+  languageName: node
+  linkType: hard
+
 "natural-sort@npm:^1.0.0":
   version: 1.0.0
   resolution: "natural-sort@npm:1.0.0"
@@ -14127,6 +14163,7 @@ __metadata:
     dd-trace: "npm:^5.131.1"
     diff: "npm:^9.0.0"
     discord-api-types: "npm:^0.38.48"
+    docx: "npm:9.15.1"
     email-providers: "npm:^2.27.0"
     emoji-regex: "npm:^10.6.0"
     es-toolkit: "npm:^1.53.0"
@@ -18329,6 +18366,13 @@ __metadata:
   version: 7.16.0
   resolution: "undici-types@npm:7.16.0"
   checksum: 10c0/3033e2f2b5c9f1504bdc5934646cb54e37ecaca0f9249c983f7b1fc2e87c6d18399ebb05dc7fd5419e02b2e915f734d872a65da2e3eeed1813951c427d33cc9a
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~8.9.0":
+  version: 8.9.0
+  resolution: "undici-types@npm:8.9.0"
+  checksum: 10c0/51c712c20c087368f62c6fc0f2bc49fa76bfe5dec28ff01584bb677ff29b0622569783c02d43e151143808c48c0503f804093bd2c491b10f2a830138034cb451
   languageName: node
   linkType: hard
 
