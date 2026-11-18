@@ -32,9 +32,9 @@ COPY --from=base --chown=nodejs:nodejs $APP_PATH/public ./public
 COPY --from=base --chown=nodejs:nodejs $APP_PATH/.sequelizerc ./.sequelizerc
 COPY --from=base --chown=nodejs:nodejs $APP_PATH/node_modules ./node_modules
 COPY --from=base --chown=nodejs:nodejs $APP_PATH/package.json ./package.json
-# Install wget to healthcheck the server
+# Install wget to healthcheck the server, and git for collection Git sync
 RUN  apt-get update \
-    && apt-get install -y wget \
+    && apt-get install -y wget git \
     && rm -rf /var/lib/apt/lists/*
 
 ENV FILE_STORAGE_LOCAL_ROOT_DIR=/var/lib/outline/data
