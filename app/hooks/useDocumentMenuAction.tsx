@@ -37,6 +37,7 @@ import {
   toggleDocumentStats,
 } from "~/actions/definitions/documents";
 import { renameActionFactory } from "~/actions/definitions/common";
+import { openDocumentMarkdownSource } from "~/actions/definitions/forkMarkdown";
 import { ActiveDocumentSection } from "~/actions/sections";
 import useMobile from "./useMobile";
 import type Template from "~/models/Template";
@@ -114,6 +115,7 @@ export function useDocumentMenuAction({
         openDocumentInDesktop,
         presentDocument,
         exportDocument,
+        openDocumentMarkdownSource,
         copyDocument,
         searchInDocument,
         ActionSeparator,
